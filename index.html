@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rosie PHOTOs</title>
+    <title>Rosie Photos</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.11.1/gsap.min.js"></script>
     <style>
         * {
@@ -124,8 +124,8 @@
             photo_width: 0,
             photo_height: 0,
             if_movable: false,
-            mouse_x: 0,
-            mouse_y: 0,
+            touch_x: 0,
+            touch_y: 0,
             standard_width: 1440,
             scale_nums: 1,
             init() {
@@ -133,19 +133,16 @@
                 window.addEventListener("resize", () => {
                     this.resize();
                 });
-                this.container.addEventListener("mousedown", (event) => {
+                this.container.addEventListener("touchstart", (event) => {
                     this.if_movable = true;
-                    this.mouse_x = event.clientX;
-                    this.mouse_y = event.clientY;
+                    this.touch_x = event.touches[0].clientX;
+                    this.touch_y = event.touches[0].clientY;
                 });
-                this.container.addEventListener("mouseup", () => {
+                this.container.addEventListener("touchend", () => {
                     this.if_movable = false;
                 });
-                this.container.addEventListener("mouseleave", () => {
-                    this.if_movable = false;
-                });
-                this.container.addEventListener("mousemove", (event) => {
-                    this.move(event.clientX, event.clientY);
+                this.container.addEventListener("touchmove", (event) => {
+                    this.move(event.touches[0].clientX, event.touches[0].clientY);
                 });
             },
             resize() {
@@ -175,8 +172,8 @@
             },
             move(x, y) {
                 if (!this.if_movable) return 0;
-                let distance_x = (x - this.mouse_x) / this.scale_nums;
-                let distance_y = (y - this.mouse_y) / this.scale_nums;
+                let distance_x = (x - this.touch_x) / this.scale_nums;
+                let distance_y = (y - this.touch_y) / this.scale_nums;
                 this.img_data.forEach((img) => {
                     let duration = 1;
                     img.mov_x += distance_x;
@@ -204,8 +201,8 @@
                         ease: 'power4.out'
                     });
                 });
-                this.mouse_x = x;
-                this.mouse_y = y;
+                this.touch_x = x;
+                this.touch_y = y;
             }
         };
 
